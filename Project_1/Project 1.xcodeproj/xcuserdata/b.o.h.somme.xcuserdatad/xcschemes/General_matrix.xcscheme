@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-               BuildableName = "Project 1"
-               BlueprintName = "Project 1"
+               BlueprintIdentifier = "72D3DCC01F601FEC00F6A4F9"
+               BuildableName = "General_matrix"
+               BlueprintName = "General_matrix"
                ReferencedContainer = "container:Project 1.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCC01F601FEC00F6A4F9"
+            BuildableName = "General_matrix"
+            BlueprintName = "General_matrix"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -46,8 +46,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/b.o.h.somme/Documents/Computational-Physics/Project_1"
+      useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -56,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCC01F601FEC00F6A4F9"
+            BuildableName = "General_matrix"
+            BlueprintName = "General_matrix"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCC01F601FEC00F6A4F9"
+            BuildableName = "General_matrix"
+            BlueprintName = "General_matrix"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

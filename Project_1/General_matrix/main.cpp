@@ -28,6 +28,7 @@ double solution(double x) {return 1.0-(1-exp(-10))*x-exp(-10*x);}
 int main(int argc, const char * argv[])
 {
     // a(i)*v(i-1) + b(i)*v(i) + c(i)*v(i+1) = f(i)
+    // u(i) is analytical solution
     
     cout << "Please give n: ";
     int n;
