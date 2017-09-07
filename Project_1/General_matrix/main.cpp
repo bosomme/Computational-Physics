@@ -1,13 +1,13 @@
-//
-//  General_matrix.cpp
-//  Project 1
-//
-//  Created by Børge Olsen-Hagen Sømme on 06.09.2017.
-//  Copyright © 2017 Børge Olsen-Hagen Sømme. All rights reserved.
-//
-//  Program used for solving general matrix, and print results to file
-//  for plotting with python
-//
+/*
+  General_matrix.cpp
+  Project 1
+
+  Created by Børge Olsen-Hagen Sømme on 06.09.2017.
+  Copyright © 2017 Børge Olsen-Hagen Sømme. All rights reserved.
+
+  Program used for solving general matrix, and print results to file
+  for plotting with python
+*/
 
 #include <iostream>
 #include <iomanip>
@@ -33,6 +33,13 @@ int main(int argc, const char * argv[])
     cout << "Please give n: ";
     int n;
     cin >> n;
+    
+    /*
+    cout << "Please give wanted output filename: "; // filename for printing to file
+    string outfile_name;
+    cin >> outfile_name;
+    */
+    
     double h = 1.0/(n+1);
     double *x = new double[n+2];
     
@@ -46,6 +53,15 @@ int main(int argc, const char * argv[])
     v[0] = 0;
     double *f = new double[n+1];
     f[0] = 0;
+    
+    double *b_tilde = new double[n+1];
+    double *f_tilde = new double[n+1];
+    
+    double temp_value;   // Value used in Gaussian elimination (expression for b_tilde)
+    double f_temp;
+    
+    clock_t start, finish;  //  declare start and final time
+    start = clock();
     
     for (int i=0; i<=n+1; i++)
     {
@@ -68,14 +84,11 @@ int main(int argc, const char * argv[])
     a[0] = 0;
     c[n] = 0;
     
-    double *b_tilde = new double[n+1];
-    double *f_tilde = new double[n+1];
+
     b_tilde[1] = b[1];
     f_tilde[1] = f[1];
     v[1] = f[1]/b[1];
-    
-    double temp_value;   // Value used in Gaussian elimination (expression for b_tilde)
-    double f_temp;
+
     
     // Forward substitution
     for (int i=2; i<=n; i++)
@@ -94,12 +107,15 @@ int main(int argc, const char * argv[])
         v[i] = (f_tilde[i] - c[i]*v[i+1])/b_tilde[i];
     }
     
+    finish = clock();
+    double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
     
+    cout << setiosflags(ios::showpoint | ios::uppercase);
+    cout << setw(20) << setprecision(10) << "Time used:" << timeused << endl;
+    
+    /*
     // Print to file
-    cout << "Please give wanted output filename: ";
-    string outfile_name;
-    cin >> outfile_name;
-    
+ 
     ofile.open(outfile_name);
     
     ofile << "Results of program main.cpp, numerical - analytical" << endl;
@@ -110,7 +126,7 @@ int main(int argc, const char * argv[])
         ofile << setprecision(8) << v[i] << "  ";
         ofile << setprecision(8) << u[i] << endl;
     }
-    
+    */
     
     delete [] a;
     delete [] b;
