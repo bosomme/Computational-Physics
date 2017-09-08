@@ -1,5 +1,5 @@
 /*
-  main.cpp
+  Special_matrix
   Project 1
 
   Created by Børge Olsen-Hagen Sømme on 01.09.2017.
@@ -96,7 +96,7 @@ int main(int argc, const char * argv[])
     double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
     
     cout << setiosflags(ios::showpoint | ios::uppercase);
-    cout << setw(20) << setprecision(10) << "Time used:" << timeused << endl;
+    cout << setw(20) << setprecision(10) << "Time used for special matrix:" << timeused << endl;
     
     /*
     // Print to file

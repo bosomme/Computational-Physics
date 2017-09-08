@@ -6,13 +6,22 @@
 	<dict>
 		<key>General_matrix.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
+		</dict>
+		<key>LU_decomposition.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>Project 1.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -23,6 +32,11 @@
 			<true/>
 		</dict>
 		<key>72D3DCC01F601FEC00F6A4F9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>72D3DCCB1F61798900F6A4F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

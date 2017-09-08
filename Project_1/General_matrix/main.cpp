@@ -1,5 +1,5 @@
 /*
-  General_matrix.cpp
+  General_matrix
   Project 1
 
   Created by Børge Olsen-Hagen Sømme on 06.09.2017.
@@ -14,6 +14,7 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <time.h>
 
 using namespace std;
 
@@ -111,7 +112,7 @@ int main(int argc, const char * argv[])
     double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
     
     cout << setiosflags(ios::showpoint | ios::uppercase);
-    cout << setw(20) << setprecision(10) << "Time used:" << timeused << endl;
+    cout << setw(20) << setprecision(10) << "Time used for general matrix:" << timeused << endl;
     
     /*
     // Print to file

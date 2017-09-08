@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-               BuildableName = "Project 1"
-               BlueprintName = "Project 1"
+               BlueprintIdentifier = "72D3DCCB1F61798900F6A4F9"
+               BuildableName = "LU_decomposition"
+               BlueprintName = "LU_decomposition"
                ReferencedContainer = "container:Project 1.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCCB1F61798900F6A4F9"
+            BuildableName = "LU_decomposition"
+            BlueprintName = "LU_decomposition"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCCB1F61798900F6A4F9"
+            BuildableName = "LU_decomposition"
+            BlueprintName = "LU_decomposition"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7265DE3D1F59C4C600FD7399"
-            BuildableName = "Project 1"
-            BlueprintName = "Project 1"
+            BlueprintIdentifier = "72D3DCCB1F61798900F6A4F9"
+            BuildableName = "LU_decomposition"
+            BlueprintName = "LU_decomposition"
             ReferencedContainer = "container:Project 1.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
