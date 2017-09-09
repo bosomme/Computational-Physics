@@ -31,9 +31,10 @@ int main(int argc, const char * argv[])
     // a(i)*v(i-1) + b(i)*v(i) + c(i)*v(i+1) = f(i)
     // u(i) is analytical solution
     
-    cout << "Please give n: ";
-    int n;
-    cin >> n;
+    //cout << "Please give n: ";
+    //int n;
+    //cin >> n;
+    int n = 1000000;
     
     /*
     cout << "Please give wanted output filename: "; // filename for printing to file
@@ -127,6 +128,7 @@ int main(int argc, const char * argv[])
         ofile << setprecision(8) << v[i] << "  ";
         ofile << setprecision(8) << u[i] << endl;
     }
+    ofile.close();
     */
     
     delete [] a;
@@ -139,7 +141,7 @@ int main(int argc, const char * argv[])
     delete [] v;
     delete [] u;
     
-    ofile.close();
+    
     
     return 0;
 }

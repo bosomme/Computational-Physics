@@ -50,7 +50,7 @@
 		72B0A2D81F62F6D200C2DA51 /* lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lib.h; path = ../../lib.h; sourceTree = "<group>"; };
 		72D3DCC11F601FEC00F6A4F9 /* General_matrix */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = General_matrix; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D3DCC31F601FEC00F6A4F9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		72D3DCCC1F61798900F6A4F9 /* LU_decomposition */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LU_decomposition; sourceTree = BUILT_PRODUCTS_DIR; };
+		72D3DCCC1F61798900F6A4F9 /* LU_decomposition */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.objfile"; path = LU_decomposition; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D3DCCE1F61798900F6A4F9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

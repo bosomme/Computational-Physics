@@ -29,15 +29,16 @@ int main(int argc, const char * argv[])
     // LU-decomposition: A = LU
     // Solve exuation Ax = b
     
-    cout << "Please give n: ";
-    int n;
-    cin >> n;
+    //cout << "Please give n: ";
+    //int n;
+    //cin >> n;
+    int n = 10000;
     
-    
+    /*
     cout << "Please give wanted output filename: "; // filename for printing to file
     string outfile_name;
     cin >> outfile_name;
-    
+    */
 
     double h = 1.0/n;
     double *x = new double[n+1];
@@ -90,7 +91,7 @@ int main(int argc, const char * argv[])
     cout << setiosflags(ios::showpoint | ios::uppercase);
     cout << setw(20) << setprecision(10) << "Time used for LU-decomposition:" << timeused << endl;
     
-    
+    /*
     // Print to file
     
     ofile.open(outfile_name);
@@ -103,13 +104,15 @@ int main(int argc, const char * argv[])
         ofile << setprecision(8) << b[i+1] << "  ";
         ofile << setprecision(8) << u[i] << endl;
     }
-    
+    ofile.close();
+    */
 
     delete [] x;
     delete [] b;
     delete [] u;
     delete [] indx;
     free_matrix((void **) A);
+
     
     return 0;
 }

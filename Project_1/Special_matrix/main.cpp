@@ -31,6 +31,7 @@ int main(int argc, const char * argv[])
     cout << "Please give n: ";
     int n;
     cin >> n;
+    //int n = 100000;
     
     /*
     cout << "Please give wanted output filename: "; // filename for printing to file
@@ -95,8 +96,21 @@ int main(int argc, const char * argv[])
     finish = clock();
     double timeused = (double) (finish - start)/(CLOCKS_PER_SEC);
     
-    cout << setiosflags(ios::showpoint | ios::uppercase);
-    cout << setw(20) << setprecision(10) << "Time used for special matrix:" << timeused << endl;
+    //cout << setiosflags(ios::showpoint | ios::uppercase);
+    //cout << setw(20) << setprecision(10) << "Time used for special matrix:" << timeused << endl;
+    
+    // Computing and extracting maximum relative error
+    double Relative_error; double new_error;
+    Relative_error = log10(fabs((v[1]-u[1])/u[1]));
+    for (int i=1; i<=n; i++)
+    {
+        new_error = log10(fabs((v[i]-u[i])/u[i]));
+        if (new_error > Relative_error)
+            Relative_error = new_error;
+    }
+    
+    cout << "Maximum relative error: " << Relative_error << endl;
+    cout << "h^2 = " << h*h << endl;
     
     /*
     // Print to file
@@ -111,6 +125,7 @@ int main(int argc, const char * argv[])
         ofile << setprecision(8) << u[i] << endl;
     }
     ofile << "Time used by algorithm = " << timeused;
+    ofile.close();
     */
     
     delete [] f;
@@ -120,7 +135,7 @@ int main(int argc, const char * argv[])
     delete [] v;
     delete [] u;
     
-    ofile.close();
+    
     
     return 0;
 }
