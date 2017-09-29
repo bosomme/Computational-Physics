@@ -36,7 +36,7 @@ fig = plt.figure()
 
 ax1 = fig.add_subplot(111)
 
-ax1.set_title('General matrix 1000x1000')
+ax1.set_title('Special 1000x1000')
 ax1.set_xlabel('x-value')
 ax1.set_ylabel('y-value')
 

@@ -32,7 +32,7 @@ int main(int argc, const char * argv[])
     //cout << "Please give n: ";
     //int n;
     //cin >> n;
-    int n = 10000;
+    int n = 10;
     
     /*
     cout << "Please give wanted output filename: "; // filename for printing to file
