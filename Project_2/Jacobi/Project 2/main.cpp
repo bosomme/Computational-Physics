@@ -18,7 +18,7 @@ using namespace std;
 
 
 
-void initialize(int, double, double*, double**, double**);
+void initialize(int, double, double*, double**, double**, int, double);
 void find_max_off_diag(int, double**, double*, int*, int*);
 void Jacobi(int, double, double**, double**);
 void min_eigenvalue(int, double**, int, double*);
@@ -30,7 +30,7 @@ void unit_tests();
 int main(int argc, const char *argv[])
 {
     cout.precision(5);
-    /*
+    ///*
     int n = 300;
     double rho_max = 4.0;
     double h = rho_max/(n);
@@ -44,8 +44,11 @@ int main(int argc, const char *argv[])
     v = (double**) matrix(n, n, sizeof(double));
     double *rho = new double[n];
     
+    int interaction = 1; //0 equals no interaction, 1 equals interaction
+    double w_r = 0.01;
+    
     // Fill matrices and rho:
-    initialize(n, h, rho, a, v);
+    initialize(n, h, rho, a, v, interaction, w_r);
     
     Jacobi(n, tolerance, a, v);
     
@@ -66,9 +69,9 @@ int main(int argc, const char *argv[])
     free_matrix((void **) v);
     delete [] rho;
     delete [] Eigenvalues;
-    */
+    //*/
     
-    unit_tests();       //Running unit tests, including conservation of orthogonality and max nondiagonal value of matrix.
+    //unit_tests();       //Running unit tests, including conservation of orthonormality and max nondiagonal value of matrix.
     
     return 0;
 }
@@ -76,10 +79,12 @@ int main(int argc, const char *argv[])
 
 
 
-
-void initialize(int n, double h, double* rho, double** a, double** v){
+// Function to initialize matrices and rho
+// Takes interaction argument to decide if what potensial to use
+void initialize(int n, double h, double* rho, double** a, double** v, int interaction, double w_r){
     // initialize rho:
-    rho[0] = 0;
+    double hh = h*h;
+    rho[0] = h;
     for(int i=1; i<n; i++){
         rho[i] = rho[i-1] + h;
     }
@@ -88,11 +93,16 @@ void initialize(int n, double h, double* rho, double** a, double** v){
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             if(i==j){
-                a[i][j] = 2/(h*h) + rho[i]*rho[i];
+                if(interaction==0){
+                    a[i][j] = 2/hh + rho[i]*rho[i];
+                }
+                else if(interaction==1){
+                    a[i][j] = 2/hh + w_r*rho[i]*rho[i] + 1/rho[i];
+                }
                 v[i][j] = 1;
             }
             else if(i==j+1 or i==j-1){
-                a[i][j] = -1/(h*h);
+                a[i][j] = -1/hh;
             }
             else{
                 a[i][j] = 0;
@@ -103,6 +113,9 @@ void initialize(int n, double h, double* rho, double** a, double** v){
 }
 
 
+
+// Function that finds the maximum value of the off-diagonal elements of a matrix
+// Return the value as amax, and indices of the element as k and l
 void find_max_off_diag(int n, double** a, double* amax, int* k, int* l){
     *amax = 0;
     for(int i=0; i<n; i++){
@@ -116,6 +129,9 @@ void find_max_off_diag(int n, double** a, double* amax, int* k, int* l){
     }
 }
 
+
+// Function to implement the Jacobi algorithm, do the rotations, and find eigenvalues and eigenvectors
+// Returns eigenvalues as diagonal of matrix a, and eigenvectors as rows in matrix v
 void Jacobi(int n, double tolerance, double** a, double** v){
     int counter = 1;
     
@@ -174,6 +190,8 @@ void Jacobi(int n, double tolerance, double** a, double** v){
 }
 
 
+// Function to find the N minimum eigenvalues
+// Returns the eigenvalues in array Ev
 void min_eigenvalue(int n, double** a, int N, double* Ev){
     //N is how many eigenvalues we would like
     double max_value = 0;
@@ -205,21 +223,34 @@ void min_eigenvalue(int n, double** a, int N, double* Ev){
 
 
 
+/* 
+    Testing
+*/
 int test_orthogonality();
 int test_max_value_of_matrix();
+int test_min_value();
 
+// Function to implement all unit tests
 void unit_tests(){
-    if(test_orthogonality() == 0 && test_max_value_of_matrix() == 0){
+    if(test_orthogonality()==0 && test_max_value_of_matrix()==0 && test_min_value()==0){
         cout << "All good!" << endl;
     }
     else if(test_orthogonality() == 1){
+        cout << "Problem with Jacobi" << endl;
         cout << "Function returns eigenvectors which are not orthogonal" << endl;
     }
     else if(test_max_value_of_matrix() == 2){
+        cout << "Problem with find_max_off_diag" << endl;
         cout << "Function not returning max nondiagonal value of matrix" << endl;
+    }
+    else if(test_min_value() == 3){
+        cout << "Problem with min_eigenvalue" << endl;
+        cout << "Function not finding smallest eigenvalues" << endl;
     }
 }
 
+// Test to check if Jacobi-function returns orthonormal eigenvectors
+// (That the rotations conserves the orthonormality)
 int test_orthogonality(){
     int n = 5;
     double rho_max = 4.0;
@@ -227,13 +258,15 @@ int test_orthogonality(){
     
     double tolerance = 1.0e-8;
     
+    int interaction = 0; double w_r = 0.0;      //No interaction
+    
     double **a;
     a = (double**) matrix(n, n, sizeof(double));
     double **v;
     v = (double**) matrix(n, n, sizeof(double));
     double *rho = new double[n];
     
-    initialize(n, h, rho, a, v);
+    initialize(n, h, rho, a, v, interaction, w_r);
     
     Jacobi(n, tolerance, a, v);
     
@@ -263,6 +296,7 @@ int test_orthogonality(){
     }
 }
 
+// Test to check if the function find_max_off_diag returns the correct off-diagonal maximum
 int test_max_value_of_matrix(){
     double **T_M;
     T_M = (double**) matrix(5, 5, sizeof(double));
@@ -271,7 +305,7 @@ int test_max_value_of_matrix(){
             T_M[i][j] = i + 2*j;
         }
     }
-    // Max-value is 20 on T_M[4][4]
+    // Max-value of entire matrix is 20 on T_M[4][4]
     // But off-diagonal max is 19 on T_M[4][3]
 
     double max_value; int k, l;
@@ -284,6 +318,25 @@ int test_max_value_of_matrix(){
     }
     else{
         return 2;
+    }
+}
+
+// Test to check if the function min_eigenvalue returns the N minimum values in a diagonal matrix
+int test_min_value(){
+    double diag_values[5] = {5,3,7,6,2};
+    double *values = new double[5];
+    double **Matr = (double**) matrix(5, 5, sizeof(double));
+    
+    for(int i=0; i<5; i++){
+        Matr[i][i] = diag_values[i];
+    }
+    
+    min_eigenvalue(5, Matr, 3, values);
+    if(values[0]==5 && values[1]==3 && values[2]==2){
+        return 0;
+    }
+    else{
+        return 3;
     }
 }
 
