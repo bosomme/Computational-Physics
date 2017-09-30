@@ -22,6 +22,7 @@ void initialize(int, double, double*, double**, double**, int, double);
 void find_max_off_diag(int, double**, double*, int*, int*);
 void Jacobi(int, double, double**, double**);
 void min_eigenvalue(int, double**, int, double*);
+void min_eigenvalue_array(int, double*, int, double*);
 
 
 void unit_tests();
@@ -30,7 +31,7 @@ void unit_tests();
 int main(int argc, const char *argv[])
 {
     cout.precision(5);
-    ///*
+    
     int n = 300;
     double rho_max = 4.0;
     double h = rho_max/(n);
@@ -44,34 +45,67 @@ int main(int argc, const char *argv[])
     v = (double**) matrix(n, n, sizeof(double));
     double *rho = new double[n];
     
-    int interaction = 1; //0 equals no interaction, 1 equals interaction
+    int interaction = 0; //0 equals no interaction, 1 equals interaction
     double w_r = 0.01;
     
     // Fill matrices and rho:
     initialize(n, h, rho, a, v, interaction, w_r);
     
+    clock_t start, end;
+    start=clock();
     Jacobi(n, tolerance, a, v);
+    end=clock();
+    
+    cout << scientific << "CPU time for Jacobi function (sec)  : " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
+    
+    // Comparing with function from library-file:
+    double *d = new double[n];
+    double *e = new double[n];
+    double **z; z = (double**) matrix(n, n, sizeof(double));
+    
+    // Initialize the arrays containing diagonal, and sub-diagonal elements:
+    d[0] = a[0][0]; e[0] = a[0][1];
+    for(int i=1; i<n; i++){
+        d[i] = a[i][i];
+        e[i] = a[i][i-1];
+    }
+    
+    //clock_t start, end;
+    start=clock();
+    tqli(d, e, n, z);
+    end=clock();
+    
+    cout  << "CPU time for library function (sec) : " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
     
     
     int N = 3;
     double *Eigenvalues = new double[N];
     min_eigenvalue(n, a, N, Eigenvalues);
+
+    double *Eigenvalues_lib = new double[N];
+    min_eigenvalue_array(n, d, N, Eigenvalues_lib);
     
+
     // print the N minimum eigenvalues:
-    cout << "The " << N << " smallest eigenvalues are:" << endl;
-    for(int i=0; i<N; i++){
-        cout << Eigenvalues[i] << endl;
-    }
-    //cout << "number of counts: " << counter << endl;
     
+    cout << endl << fixed << "The " << N << " smallest eigenvalues are:" << endl;
+    cout << "Jacobi function - Library function" << endl;
+    for(int i=0; i<N; i++){
+        cout << setw(12) << Eigenvalues[i];
+        cout << setw(17) << Eigenvalues_lib[i] << endl;
+    }
     
     free_matrix((void **) a);
     free_matrix((void **) v);
     delete [] rho;
     delete [] Eigenvalues;
-    //*/
     
-    //unit_tests();       //Running unit tests, including conservation of orthonormality and max nondiagonal value of matrix.
+    delete [] d;
+    delete [] e;
+    free_matrix((void **) z);
+    
+    
+    unit_tests();       //Running unit tests, including conservation of orthonormality and max nondiagonal value of matrix.
     
     return 0;
 }
@@ -190,11 +224,11 @@ void Jacobi(int n, double tolerance, double** a, double** v){
 }
 
 
-// Function to find the N minimum eigenvalues
+// Function to find the N minimum eigenvalues from a diagonal matrix
 // Returns the eigenvalues in array Ev
 void min_eigenvalue(int n, double** a, int N, double* Ev){
     //N is how many eigenvalues we would like
-    double max_value = 0;
+    double min_value = 0;
     int g = 0;
     
     for(int i=0; i<N; i++){
@@ -202,18 +236,18 @@ void min_eigenvalue(int n, double** a, int N, double* Ev){
     }
     
     for(int i=0; i<N; i++){
-        if(Ev[i] > max_value){
-            max_value = Ev[i];
+        if(Ev[i] > min_value){
+            min_value = Ev[i];
             g = i;
         }
     }
     for(int i=N; i<n; i++){
-        if(a[i][i] <= max_value){
+        if(a[i][i] <= min_value){
             Ev[g] = a[i][i];
-            max_value = 0;
+            min_value = 0;
             for(int i=0; i<N; i++){
-                if(Ev[i] > max_value){
-                    max_value = Ev[i];
+                if(Ev[i] > min_value){
+                    min_value = Ev[i];
                     g = i;
                 }
             }
@@ -221,6 +255,36 @@ void min_eigenvalue(int n, double** a, int N, double* Ev){
     }
 }
 
+
+// Function to find the N minimum values in an array
+void min_eigenvalue_array(int n, double* d, int N, double* Ev){
+    //N is how many eigenvalues we would like
+    double min_value = 0;
+    int g = 0;
+    
+    for(int i=0; i<N; i++){
+        Ev[i] = d[i];
+    }
+    
+    for(int i=0; i<N; i++){
+        if(Ev[i] > min_value){
+            min_value = Ev[i];
+            g = i;
+        }
+    }
+    for(int i=N; i<n; i++){
+        if(d[i] <= min_value){
+            Ev[g] = d[i];
+            min_value = 0;
+            for(int i=0; i<N; i++){
+                if(Ev[i] > min_value){
+                    min_value = Ev[i];
+                    g = i;
+                }
+            }
+        }
+    }
+}
 
 
 /* 
