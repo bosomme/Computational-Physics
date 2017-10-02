@@ -20,7 +20,7 @@ using namespace std;
 
 void initialize(int, double, double*, double**, double**, int, double);
 void find_max_off_diag(int, double**, double*, int*, int*);
-void Jacobi(int, double, double**, double**);
+int Jacobi(int, double, double**, double**);
 void min_eigenvalue(int, double**, int, double*);
 void min_eigenvalue_array(int, double*, int, double*);
 
@@ -35,7 +35,7 @@ int main(int argc, const char *argv[])
     int n = 300;
     double rho_max = 4.0;
     double h = rho_max/(n);
-    
+
     double tolerance = 1.0e-8;
     
     
@@ -53,11 +53,12 @@ int main(int argc, const char *argv[])
     
     clock_t start, end;
     start=clock();
-    Jacobi(n, tolerance, a, v);
+    int counter = Jacobi(n, tolerance, a, v);
     end=clock();
-    
+
+    cout << fixed << "Number of iterations for " << n << " meshpoints, before the eigenvalues are found: " << counter << endl;
     cout << scientific << "CPU time for Jacobi function (sec)  : " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
-    
+
     // Comparing with function from library-file:
     double *d = new double[n];
     double *e = new double[n];
@@ -75,13 +76,12 @@ int main(int argc, const char *argv[])
     tqli(d, e, n, z);
     end=clock();
     
-    cout  << "CPU time for library function (sec) : " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
-    
+    cout  << scientific << "CPU time for library function (sec) : " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
     
     int N = 3;
     double *Eigenvalues = new double[N];
     min_eigenvalue(n, a, N, Eigenvalues);
-
+    
     double *Eigenvalues_lib = new double[N];
     min_eigenvalue_array(n, d, N, Eigenvalues_lib);
     
@@ -103,6 +103,7 @@ int main(int argc, const char *argv[])
     delete [] d;
     delete [] e;
     free_matrix((void **) z);
+     delete [] Eigenvalues_lib;
     
     
     unit_tests();       //Running unit tests, including conservation of orthonormality and max nondiagonal value of matrix.
@@ -166,10 +167,10 @@ void find_max_off_diag(int n, double** a, double* amax, int* k, int* l){
 
 // Function to implement the Jacobi algorithm, do the rotations, and find eigenvalues and eigenvectors
 // Returns eigenvalues as diagonal of matrix a, and eigenvectors as rows in matrix v
-void Jacobi(int n, double tolerance, double** a, double** v){
-    int counter = 1;
-    
+int Jacobi(int n, double tolerance, double** a, double** v){
     double t = 0, s = 0, c = 0, tau = 0;
+    
+    int counter = 1;
     
     int k, l;
     double amax;
@@ -210,7 +211,6 @@ void Jacobi(int n, double tolerance, double** a, double** v){
             vik = v[i][k]; vil = v[i][l];
             v[i][k] = vik*c - vil*s;
             v[i][l] = vil*c + vik*s;
-            
         }
         
         a[k][k] = akk*c*c - 2*amax*c*s + all*s*s;
@@ -218,9 +218,9 @@ void Jacobi(int n, double tolerance, double** a, double** v){
         a[k][l] = 0.0;
         a[l][k] = 0.0;
         
-        
         counter ++;
     }
+    return counter;
 }
 
 
@@ -332,7 +332,7 @@ int test_orthogonality(){
     
     initialize(n, h, rho, a, v, interaction, w_r);
     
-    Jacobi(n, tolerance, a, v);
+    int counter = Jacobi(n, tolerance, a, v);
     
     
     double delta_ieqj = 0;double delta_inoteqj = 0;
