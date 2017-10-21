@@ -1,0 +1,33 @@
+
+Euler’s Method:
+for (int i=0; i<N; i++){
+    r_i = sqrt(x[i]*x[i] + y[i]*y[i]);
+    x[i+1] = x[i] + h*v_x_i;
+    y[i+1] = y[i] + h*v_y_i;
+    t[i+1] = t[i] + h;
+    // Update velocities
+    velocity = (4*M_PI*M_PI)/(r_i*r_i*r_i);
+    v_x_i -= h*velocity*x[i];
+    v_y_i -= h*velocity*y[i];
+
+
+
+The velocity Verlet method    
+for (int i=0; i<N; i++)
+    r = sqrt(x[i]*x[i] + y[i]*y[i]);
+
+    x[i+1] = x[i] + h*v_x_i + hh/2*a_x_old;
+    y[i+1] = y[i] + h*v_y_i + hh/2*a_y_old;
+    t[i+1] = t[i] + h;
+        
+    F = -G*M_sun/(r*r*r); //Modified Force
+        
+    a_x_new = F*x[i+1]; a_y_new = F*y[i+1];
+        
+    v_x_i += h/2*(a_x_new + a_x_old);
+    a_x_old = a_x_new;
+    v_y_i += h/2*(a_y_new + a_y_old);
+    a_y_old = a_y_new;
+
+
+
