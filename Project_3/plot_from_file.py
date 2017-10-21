@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-filename = "test.txt"
+filename = "velocity_verlet.txt"
 
 if filename == ".txt":
    sys.exit("Error: please put in filename, title and labels")
