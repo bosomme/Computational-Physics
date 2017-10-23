@@ -17,6 +17,7 @@
 
 
 #include "ODEsolver.h"
+#include "planet.h"
 
 
 
@@ -28,12 +29,12 @@ ofstream ofile;
 int main(int argc, const char * argv[]) {
     // Set variable to decide which method should be implemented:
     // Eulers method = 0, Velocity Verlet = 1
-    int method = 1;
+    int method = 2;
     
     string outfile_name;
     
-    int N = 1E4;
-    double Final_time = 50.;
+    int N = 1E6;
+    double Final_time = 300.;
     double h = Final_time/N;
     
     // Inital values (given in [AU]):
@@ -43,13 +44,13 @@ int main(int argc, const char * argv[]) {
     double *x = new double[N];
     double *y = new double[N];
     x[0] = x_initial; y[0] = y_initial;
-    double v_x_0 = 0; double v_y_0 = 6.3;
+    double v_x_0 = 0; double v_y_0 = 6.29*sqrt(2);
     
     double *t = new double[N];
     
     
     if (method == 0){
-        ODEsolver solve;
+        ODEsolver solve(v_x_0, v_y_0);
         solve.Eulers_Method(N, h, x, y, t);
         outfile_name = "eulers_method.txt";
     }
@@ -58,10 +59,14 @@ int main(int argc, const char * argv[]) {
         solve.Velocity_Verlet(N, h, x, y, t);
         outfile_name = "velocity_verlet.txt";
     }
+    else if (method == 2){
+        ODEsolver solve(v_x_0, v_y_0);
+        solve.Velocity_Verlet(N, h, x, y, t);
+        outfile_name = "escape_velocity.txt";
+    }
     
 
     // Print to file
-    
     ofile.open(outfile_name);
     
     ofile << "Results of program main.cpp, t - x - y" << endl;
@@ -73,7 +78,6 @@ int main(int argc, const char * argv[]) {
         ofile << setprecision(8) << y[i] << endl;
     }
     ofile.close();
-    
     
     
     delete [] x;

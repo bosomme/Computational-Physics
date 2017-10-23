@@ -13,7 +13,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-filename = "velocity_verlet.txt"
+#Change this name!#
+filename = "escape_velocity.txt"
+#Change this name!#
 
 if filename == ".txt":
    sys.exit("Error: please put in filename, title and labels")
@@ -31,11 +33,9 @@ for line in data:
 
 file.close()
 
-x_init = x[0]; y_init = y[0]
 
 
-
-fig = plt.figure()
+fig = plt.figure(figsize=(6,4.5))
 
 ax1 = fig.add_subplot(111)
 
@@ -43,8 +43,10 @@ ax1.set_xlabel('x-value [AU]')
 ax1.set_ylabel('y-value [AU]')
 
 ax1.plot(x, y)
-ax1.annotate('Starting Point', xy=(x[0],y[0]), textcoords='data')
+ax1.plot(x[-1], y[-1], 'rx')
+#ax1.annotate('Starting Point', xy=(0.5,0), textcoords='data')
+ax1.axis('equal')   #Equal axis
 
-leg = ax1.legend(['Earth, Orbit'])
+leg = ax1.legend(['Earth'])
 
 plt.show()
