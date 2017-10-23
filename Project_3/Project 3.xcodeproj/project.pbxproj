@@ -65,9 +65,9 @@
 			children = (
 				7200327B1F9B3DED00F1E1F1 /* main.cpp */,
 				72847EDF1F9B8729007005D9 /* ODEsolver.cpp */,
+				72847EE01F9B8729007005D9 /* ODEsolver.h */,
 				72ACA88D1F9CB9820091D95F /* planet.cpp */,
 				72ACA88E1F9CB9820091D95F /* planet.h */,
-				72847EE01F9B8729007005D9 /* ODEsolver.h */,
 			);
 			path = "Project 3";
 			sourceTree = "<group>";

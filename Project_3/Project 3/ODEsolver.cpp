@@ -11,39 +11,40 @@
 
 using namespace std;
 
+ofstream ofile;
+
 // Initializers
 ODEsolver::ODEsolver(){
     G = 4*M_PI*M_PI;
-    v_x_i = 0; v_y_i = 6.3;
+    number_of_planets = 0;
     Kinetic_Energy = 0.0;
     Potential_Energy = 0.0;
     Total_Energy = 0.0;
 }
 
-ODEsolver::ODEsolver(double initial_velocity_x, double initial_velocity_y){
-    G = 4*M_PI*M_PI;
-    v_x_i = initial_velocity_x; v_y_i = initial_velocity_y;
-    Kinetic_Energy = 0.0;
-    Potential_Energy = 0.0;
-    Total_Energy = 0.0;
-}
 
+void ODEsolver::Add_Planet(planet new_planet){
+    number_of_planets += 1;
+    all_planets.push_back(new_planet);
+}
 
 
 // Function to solve an ordinary diffential equation using Eulers Method
 // Takes initial values for x and y as first values of arrays, and fills arrays x and y with corresponing positions.
 void ODEsolver::Eulers_Method(int N, double h, double *x, double *y, double *t){
+    /*
     double r = sqrt(x[0]*x[0] + y[0]*y[0]);
     double velocity = 0;
     
-    double M_earth = 0.000003;
+    //double M_earth = 0.000003;
     
     
     cout << setprecision(4) << scientific;
-    Energy(M_earth, r);
+    Energy(M_earth, x[N], y[N], v_x_i, v_y_i);
     cout << "Start: " << endl;
     print_energy();
     
+     
     clock_t start, end;
     start=clock();
     
@@ -60,66 +61,84 @@ void ODEsolver::Eulers_Method(int N, double h, double *x, double *y, double *t){
     
     end=clock();
     
-    Energy(M_earth, r);
+    
+    Energy(M_earth, x[N], y[N], v_x_i, v_y_i);
     cout << "End:   " << endl;
     print_energy();
-    
+ 
+
     cout << scientific << "CPU time for Eulers method (sec): " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
-}
+     */
+ }
 
 
 
 // Function to solve an ordinary diffential equation using the velocity Verlet method
 // Takes initial values for x and y as first values of arrays, and fills arrays x and y with corresponing positions.
-void ODEsolver::Velocity_Verlet(int N, double h, double *x, double *y, double *t){
+void ODEsolver::Velocity_Verlet(int N, double h, string outfile_name){
+    ofile.open(outfile_name);
+    
+    ofile << "Positions for planets (x, y)" << endl;
+    ofile << setiosflags(ios::showpoint | ios::uppercase);
+    
     double hh = h*h;
 
-    double M_sun = 1; double M_earth = 0.000003;
-    
-    double r = sqrt(x[0]*x[0] + y[0]*y[0]);
-    double F = -G*M_sun/(r*r*r);                        // Modified (F = -G*M_sun*M_earth/(r*r) and a_x = (F/M_earth) * x/r)
-    double a_x_old = F*x[0]; double a_y_old = F*y[0];
-    double a_x_new, a_y_new;
-    
-    cout << setprecision(4) << scientific;
-    Energy(M_earth, r);
-    cout << "Start: " << endl;
-    print_energy();
+    double F, Fx, Fy; double X, Y;
+    double a_x_old, a_y_old, a_x_new, a_y_new;
+
     
     clock_t start, end;
     start=clock();
-
-    for (int i=0; i<N; i++){
-        r = sqrt(x[i]*x[i] + y[i]*y[i]);
-        
-        x[i+1] = x[i] + h*v_x_i + hh/2*a_x_old;
-        y[i+1] = y[i] + h*v_y_i + hh/2*a_y_old;
-        t[i+1] = t[i] + h;
-        
-        F = -G*M_sun/(r*r*r); //Modified Force
-        
-        a_x_new = F*x[i+1]; a_y_new = F*y[i+1];
-        
-        v_x_i += h/2*(a_x_new + a_x_old);
-        a_x_old = a_x_new;
-        v_y_i += h/2*(a_y_new + a_y_old);
-        a_y_old = a_y_new;
-    }
     
+    
+    for (int i=0; i<N; i++){
+        
+        for (int nr_1=0; nr_1<number_of_planets; nr_1++){
+            planet &current = all_planets[nr_1];
+            Fx = 0.0; Fy = 0.0;
+            
+            ofile << setprecision(8) << current.x << "  ";
+            ofile << setprecision(8) << current.y << "  ";
+            
+            for (int nr_2=nr_1+1; nr_2<number_of_planets; nr_2++){
+                planet &other = all_planets[nr_2];
+                F = current.Gravitational_Force(other, G);
+                X = current.x - other.x; Y = current.y - other.y;
+                Fx -= F*X/current.distance(other); Fy -= F*Y/current.distance(other);
+            }
+            
+            a_x_old = Fx/current.mass_of_planet; a_y_old = Fy/current.mass_of_planet;
+            current.x += h*current.v_x + hh/2*a_x_old;
+            current.y += h*current.v_y + hh/2*a_y_old;
+            
+            Fx = 0.0; Fy = 0.0;
+            
+            for (int nr_2=nr_1+1; nr_2<number_of_planets; nr_2++){
+                planet &other = all_planets[nr_2];
+                F = current.Gravitational_Force(other, G);
+                X = current.x - other.x; Y = current.y - other.x;
+                Fx -= F*X/current.distance(other); Fy -= F*Y/current.distance(other);
+            }
+            
+            a_x_new = Fx/current.mass_of_planet; a_y_new = Fy/current.mass_of_planet;
+            current.v_x += h/2*(a_x_new + a_x_old);
+            current.v_y += h/2*(a_y_new + a_y_old);
+            
+        }
+        ofile << endl;
+        
+    }
     end=clock();
     
-    Energy(M_earth, r);
-    cout << "End:   " << endl;
-    print_energy();
+    ofile.close();
     
-    cout << scientific << "CPU time for the Verlet Velocity method (sec): " << ((double)end-(double)start)/CLOCKS_PER_SEC << endl;
 }
 
 
 // Function to find kinetic and potential energy
-void ODEsolver::Energy(double mass_of_planet, double r){
-    planet planet(mass_of_planet);
-    Kinetic_Energy = planet.Kinetic_Energy(v_x_i, v_y_i);
+void ODEsolver::Energy(planet planet, double x, double y, double vx, double vy){
+    Kinetic_Energy = planet.Kinetic_Energy(vx, vy);
+    double r = sqrt(x*x + y*y);
     Potential_Energy = planet.Potential_Energy(G, r);
     Total_Energy = Kinetic_Energy+Potential_Energy;
 }

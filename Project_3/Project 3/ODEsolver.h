@@ -19,6 +19,8 @@
 #include <iomanip>
 #include <time.h>
 
+#include <vector>
+
 
 class ODEsolver
 {
@@ -27,19 +29,21 @@ public:
     
     
     double G;
-    double v_x_i; double v_y_i;
+    int number_of_planets;
+    std::vector<planet> all_planets;
     double Kinetic_Energy; double Potential_Energy;
     double Total_Energy;
     
     // Initializers:
     ODEsolver();
-    ODEsolver(double initial_velocity_x, double initial_velocity_y);
     
     // Functions:
-    void Eulers_Method(int N, double h, double *x, double *y, double *t);
-    void Velocity_Verlet(int N, double h,  double *x, double *y, double *t);
+    void Add_Planet(planet new_planet);
     
-    void Energy(double mass_of_planet, double r);
+    void Eulers_Method(int N, double h, double *x, double *y, double *t);
+    void Velocity_Verlet(int N, double h, std::string outfile_name);
+    
+    void Energy(planet planet, double x, double y, double vx, double vy);
     void print_energy();
 };
 

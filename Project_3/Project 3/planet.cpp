@@ -11,11 +11,19 @@
 planet::planet(){
     mass_of_sun = 1.0;
     mass_of_planet = 0.000003;
+    x = 0.0;
+    y = 0.0;
+    v_x = 0.0;
+    v_y = 0.0;
 }
 
-planet::planet(double mass){
+planet::planet(double mass, double pos_x, double pos_y, double vx, double vy){
     mass_of_sun = 1.0;
     mass_of_planet = mass;
+    x = pos_x;
+    y = pos_y;
+    v_x = vx;
+    v_y = vy;
 }
 
 double planet::Kinetic_Energy(double v_x, double v_y){
@@ -26,4 +34,15 @@ double planet::Kinetic_Energy(double v_x, double v_y){
 double planet::Potential_Energy(double G, double r){
     return -G*mass_of_planet*mass_of_sun/r;
 }
+
+double planet::distance(planet other){
+    double X = x-other.x; double Y = y-other.y;
+    return sqrt(X*X + Y*Y);
+}
+
+double planet::Gravitational_Force(planet other, double G){
+    return  -G*mass_of_planet*other.mass_of_planet/(distance(other)*distance(other));
+}
+
+
 

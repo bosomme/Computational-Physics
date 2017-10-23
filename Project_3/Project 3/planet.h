@@ -18,14 +18,18 @@ class planet
 public:
     double mass_of_sun;
     double mass_of_planet;
+    double x, y, v_x, v_y;
     
     // Initializers
     planet();
-    planet(double mass);
+    planet(double mass, double pos_x, double pos_y, double vx, double vy);
     
     // Functions
     double Kinetic_Energy(double velocity_x, double velocity_y);
     double Potential_Energy(double G, double r);
+    
+    double distance(planet other);
+    double Gravitational_Force(planet other, double G);
     
 };
 

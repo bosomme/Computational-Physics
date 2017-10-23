@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import sys
 
 #Change this name!#
-filename = "escape_velocity.txt"
+filename = "Earth_Jupiter.txt"
 #Change this name!#
 
 if filename == ".txt":
@@ -24,12 +24,17 @@ file = open(filename, 'r')
 file.readline()
 
 data = file.readlines()
-t = []; x = []; y = []
+x_earth = []; y_earth = []
+x_jupiter = []; y_jupiter = []
+x_sun = []; y_sun = []
 
 for line in data:
-    t.append(line.split()[0])
-    x.append(line.split()[1])
-    y.append(line.split()[2])
+    x_earth.append(line.split()[0])
+    y_earth.append(line.split()[1])
+    x_jupiter.append(line.split()[2])
+    y_jupiter.append(line.split()[3])
+    x_sun.append(line.split()[4])
+    x_sun.append(line.split()[5])
 
 file.close()
 
@@ -42,11 +47,13 @@ ax1 = fig.add_subplot(111)
 ax1.set_xlabel('x-value [AU]')
 ax1.set_ylabel('y-value [AU]')
 
-ax1.plot(x, y)
-ax1.plot(x[-1], y[-1], 'rx')
+ax1.plot(x_earth, y_earth)
+ax1.plot(x_jupiter, y_jupiter)
+#ax1.plot(x_sun, y_sun)
+#ax1.plot(x[-1], y[-1], 'rx')
 #ax1.annotate('Starting Point', xy=(0.5,0), textcoords='data')
 ax1.axis('equal')   #Equal axis
 
-leg = ax1.legend(['Earth'])
+leg = ax1.legend(['Earth', 'Jupiter'])
 
 plt.show()
