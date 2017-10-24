@@ -43,6 +43,8 @@ public:
     void Eulers_Method(int N, double h, double *x, double *y, double *t);
     void Velocity_Verlet(int N, double h, std::string outfile_name);
     
+    void Gravitational_Force(planet &current, planet &other, double &Fx, double &Fy);
+    
     void Energy(planet planet, double x, double y, double vx, double vy);
     void print_energy();
 };

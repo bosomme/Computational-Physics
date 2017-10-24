@@ -25,12 +25,11 @@ public:
     planet(double mass, double pos_x, double pos_y, double vx, double vy);
     
     // Functions
+    double distance(planet other);
+    void Gravitational_Force(planet &other, double G, double &Fx, double &Fy);
+    
     double Kinetic_Energy(double velocity_x, double velocity_y);
     double Potential_Energy(double G, double r);
-    
-    double distance(planet other);
-    double Gravitational_Force(planet other, double G);
-    
 };
 
 #endif /* planet_h */

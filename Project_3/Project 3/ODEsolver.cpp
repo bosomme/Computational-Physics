@@ -83,8 +83,8 @@ void ODEsolver::Velocity_Verlet(int N, double h, string outfile_name){
     
     double hh = h*h;
 
-    double F, Fx, Fy; double X, Y;
-    double a_x_old, a_y_old, a_x_new, a_y_new;
+    double F_x, F_y, F_x_new, F_y_new;
+    double a_x, a_y, a_x_new, a_y_new;
 
     
     clock_t start, end;
@@ -95,43 +95,56 @@ void ODEsolver::Velocity_Verlet(int N, double h, string outfile_name){
         
         for (int nr_1=0; nr_1<number_of_planets; nr_1++){
             planet &current = all_planets[nr_1];
-            Fx = 0.0; Fy = 0.0;
+            F_x = 0.0; F_y = 0.0; F_x_new = 0.0; F_y_new = 0.0;
             
             ofile << setprecision(8) << current.x << "  ";
             ofile << setprecision(8) << current.y << "  ";
             
-            for (int nr_2=nr_1+1; nr_2<number_of_planets; nr_2++){
-                planet &other = all_planets[nr_2];
-                F = current.Gravitational_Force(other, G);
-                X = current.x - other.x; Y = current.y - other.y;
-                Fx -= F*X/current.distance(other); Fy -= F*Y/current.distance(other);
+            // Must loop over all other planets, not just the ones who was not looped over before
+            // Therefore we use if-statements
+            for (int nr_2=0; nr_2<number_of_planets; nr_2++){
+                if (nr_2 == nr_1){
+                    F_x += 0.0; F_y += 0.0;
+                }
+                else{
+                    planet &other = all_planets[nr_2];
+                    current.Gravitational_Force(other, G, F_x, F_y);
+                }
             }
             
-            a_x_old = Fx/current.mass_of_planet; a_y_old = Fy/current.mass_of_planet;
-            current.x += h*current.v_x + hh/2*a_x_old;
-            current.y += h*current.v_y + hh/2*a_y_old;
+            a_x = F_x/current.mass_of_planet; a_y = F_y/current.mass_of_planet;
+            current.x += h*current.v_x + hh/2*a_x;
+            current.y += h*current.v_y + hh/2*a_y;
             
-            Fx = 0.0; Fy = 0.0;
-            
-            for (int nr_2=nr_1+1; nr_2<number_of_planets; nr_2++){
-                planet &other = all_planets[nr_2];
-                F = current.Gravitational_Force(other, G);
-                X = current.x - other.x; Y = current.y - other.x;
-                Fx -= F*X/current.distance(other); Fy -= F*Y/current.distance(other);
+            for (int nr_2=0; nr_2<number_of_planets; nr_2++){
+                if (nr_2 == nr_1){
+                    F_x_new += 0.0; F_y_new += 0.0;
+                }
+                else{
+                    planet &other = all_planets[nr_2];
+                    current.Gravitational_Force(other, G, F_x_new, F_y_new);
+                }
             }
             
-            a_x_new = Fx/current.mass_of_planet; a_y_new = Fy/current.mass_of_planet;
-            current.v_x += h/2*(a_x_new + a_x_old);
-            current.v_y += h/2*(a_y_new + a_y_old);
+            a_x_new = F_x_new/current.mass_of_planet; a_y_new = F_y_new/current.mass_of_planet;
+            current.v_x += h/2*(a_x_new + a_x);
+            current.v_y += h/2*(a_y_new + a_y);
             
         }
         ofile << endl;
-        
     }
     end=clock();
     
     ofile.close();
     
+}
+
+
+void ODEsolver::Gravitational_Force(planet &current, planet &other, double &Fx, double &Fy){
+    double r = current.distance(other);
+    double F = -G*current.mass_of_planet*other.mass_of_planet/(r*r);
+    Fx += F*(current.x-other.x)/r;
+    Fy += F*(current.y-other.y)/r;
 }
 
 
